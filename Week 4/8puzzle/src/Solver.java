@@ -7,7 +7,7 @@ public class Solver {
 
   final private MinPQ<SearchNode> minPriorityQueue;
   final private MinPQ<SearchNode> twinMinPriorityQueue;
-  final private Board goalBoard;
+  final  Board goalBoard;
   private Optional<SearchNode> searchResultNode;
 
   private class SearchNode implements Comparable<SearchNode> {
@@ -71,93 +71,40 @@ public class Solver {
   }
 
 
-  private Optional<SearchNode> newMethod(MinPQ<SearchNode> priorityQueue) {
-    SearchNode minPriorityNode = priorityQueue.delMin();
-    if (minPriorityNode.board.equals(goalBoard)) {
-      searchResultNode = Optional.of(minPriorityNode);
-      return searchResultNode;
-    } else {
-      for (Board board : minPriorityNode.board.neighbors()) {
-        if (minPriorityNode.previousSearchNode.isPresent()) {
-          if (!board.equals(minPriorityNode.previousSearchNode.get().board)) {
+  private Optional<SearchNode> findGoalBoard() {
+    while (true) {
+      SearchNode minPriorityNode = minPriorityQueue.delMin();
+      if (minPriorityNode.board.equals(goalBoard)) {
+        searchResultNode = Optional.of(minPriorityNode);
+        return searchResultNode;
+      } else {
+        for (Board board : minPriorityNode.board.neighbors()) {
+          if (minPriorityNode.previousSearchNode.isPresent()) {
+            if (!board.equals(minPriorityNode.previousSearchNode.get().board)) {
+              minPriorityQueue.insert(new SearchNode(board, Optional.of(minPriorityNode)));
+            }
+          } else {
             minPriorityQueue.insert(new SearchNode(board, Optional.of(minPriorityNode)));
           }
-        } else {
-          minPriorityQueue.insert(new SearchNode(board, Optional.of(minPriorityNode)));
+        }
+      }
+      SearchNode twinMinPriorityNode = twinMinPriorityQueue.delMin();
+      if (twinMinPriorityNode.board.equals(goalBoard)) {
+        searchResultNode = Optional.empty();
+        return searchResultNode;
+      } else {
+        for (Board board : twinMinPriorityNode.board.neighbors()) {
+          if (twinMinPriorityNode.previousSearchNode.isPresent()) {
+            if (!board.equals(twinMinPriorityNode.previousSearchNode.get().board)) {
+              twinMinPriorityQueue.insert(new SearchNode(board, Optional.of(twinMinPriorityNode)));
+            }
+          } else {
+            twinMinPriorityQueue.insert(new SearchNode(board, Optional.of(twinMinPriorityNode)));
+          }
         }
       }
     }
-    searchResultNode = Optional.empty();
-    return searchResultNode;
   }
-
-  private Optional<SearchNode> findGoalBoard() {
-    while (true) {
-
-      Optional<SearchNode> result = newMethod(minPriorityQueue);
-      if (result.isPresent()) {
-        return result;
-      }
-
-      Optional<SearchNode> twinResult = newMethod(twinMinPriorityQueue);
-      if (twinResult.isPresent()) {
-        return Optional.empty();
-      }
-    }
-  }
-
-//      SearchNode twinMinPriorityNode = twinMinPriorityQueue.delMin();
-//      if (twinMinPriorityNode.board.equals(goalBoard)) {
-//        searchResultNode = Optional.empty();
-//        return searchResultNode;
-//      } else {
-//        for (Board board : twinMinPriorityNode.board.neighbors()) {
-//          if (twinMinPriorityNode.previousSearchNode.isPresent()) {
-//            if (!board.equals(twinMinPriorityNode.previousSearchNode.get().board)) {
-//              twinMinPriorityQueue.insert(new SearchNode(board, Optional.of(twinMinPriorityNode)));
-//            }
-//          } else {
-//            twinMinPriorityQueue.insert(new SearchNode(board, Optional.of(twinMinPriorityNode)));
-//          }
-//        }
-//      }
-//}
-//  }
-
-//  private Optional<SearchNode> findGoalBoard() {
-//    while (true) {
-//      SearchNode minPriorityNode = minPriorityQueue.delMin();
-//      if (minPriorityNode.board.equals(goalBoard)) {
-//        searchResultNode = Optional.of(minPriorityNode);
-//        return searchResultNode;
-//      } else {
-//        for (Board board : minPriorityNode.board.neighbors()) {
-//          if (minPriorityNode.previousSearchNode.isPresent()) {
-//            if (!board.equals(minPriorityNode.previousSearchNode.get().board)) {
-//              minPriorityQueue.insert(new SearchNode(board, Optional.of(minPriorityNode)));
-//            }
-//          } else {
-//            minPriorityQueue.insert(new SearchNode(board, Optional.of(minPriorityNode)));
-//          }
-//        }
-//      }
-//      SearchNode twinMinPriorityNode = twinMinPriorityQueue.delMin();
-//      if (twinMinPriorityNode.board.equals(goalBoard)) {
-//        searchResultNode = Optional.empty();
-//        return searchResultNode;
-//      } else {
-//        for (Board board : twinMinPriorityNode.board.neighbors()) {
-//          if (twinMinPriorityNode.previousSearchNode.isPresent()) {
-//            if (!board.equals(twinMinPriorityNode.previousSearchNode.get().board)) {
-//              twinMinPriorityQueue.insert(new SearchNode(board, Optional.of(twinMinPriorityNode)));
-//            }
-//          } else {
-//            twinMinPriorityQueue.insert(new SearchNode(board, Optional.of(twinMinPriorityNode)));
-//          }
-//        }
-//      }
-//    }
-//  }
 
 public boolean isSolvable(){
     return searchResultNode.isPresent()?true:findGoalBoard().isPresent();
