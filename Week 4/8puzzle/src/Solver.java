@@ -7,7 +7,7 @@ public class Solver {
 
   final private MinPQ<SearchNode> minPriorityQueue;
   final private MinPQ<SearchNode> twinMinPriorityQueue;
-  final  Board goalBoard;
+  final Board goalBoard;
   private Optional<SearchNode> searchResultNode;
 
   private class SearchNode implements Comparable<SearchNode> {
@@ -106,48 +106,48 @@ public class Solver {
     }
   }
 
-public boolean isSolvable(){
-    return searchResultNode.isPresent()?true:findGoalBoard().isPresent();
-    }
+  public boolean isSolvable() {
+    return searchResultNode.isPresent() ? true : findGoalBoard().isPresent();
+  }
 
-// min number of moves to solve initial board; -1 if unsolvable
-public int moves(){
-    if(searchResultNode.isPresent()){
-    return searchResultNode.get().numberOfMoves;
+  // min number of moves to solve initial board; -1 if unsolvable
+  public int moves() {
+    if (searchResultNode.isPresent()) {
+      return searchResultNode.get().numberOfMoves;
     }
-    Optional<SearchNode> searchNode=findGoalBoard();
-    return searchNode.isPresent()?searchNode.get().getNumberOfMoves():-1;
-    }
+    Optional<SearchNode> searchNode = findGoalBoard();
+    return searchNode.isPresent() ? searchNode.get().getNumberOfMoves() : -1;
+  }
 
-private Iterable<Board> getBoardSequence(Optional<SearchNode> searchNode){
-    int moves=searchNode.get().numberOfMoves;
-    ArrayDeque<Board> boardSequence=new ArrayDeque<>();
+  private Iterable<Board> getBoardSequence(Optional<SearchNode> searchNode) {
+    int moves = searchNode.get().numberOfMoves;
+    ArrayDeque<Board> boardSequence = new ArrayDeque<>();
     Board previousBoard;
     boardSequence.addFirst(searchNode.get().board);
-    for(int i=0;i<moves; i++){
-    previousBoard=searchNode.get().previousSearchNode.get().board;
-    boardSequence.addFirst(previousBoard);
-    searchNode=searchNode.get().previousSearchNode;
+    for (int i = 0; i < moves; i++) {
+      previousBoard = searchNode.get().previousSearchNode.get().board;
+      boardSequence.addFirst(previousBoard);
+      searchNode = searchNode.get().previousSearchNode;
     }
     return boardSequence;
-    }
+  }
 
-// sequence of boards in a shortest solution; null if unsolvable
-public Iterable<Board> solution(){
-    if(searchResultNode.isPresent()){
-    return getBoardSequence(searchResultNode);
-    }else{
-    searchResultNode=findGoalBoard();
-    if(searchResultNode.isPresent()){
-    return getBoardSequence(searchResultNode);
-    }else{
-    return null;
+  // sequence of boards in a shortest solution; null if unsolvable
+  public Iterable<Board> solution() {
+    if (searchResultNode.isPresent()) {
+      return getBoardSequence(searchResultNode);
+    } else {
+      searchResultNode = findGoalBoard();
+      if (searchResultNode.isPresent()) {
+        return getBoardSequence(searchResultNode);
+      } else {
+        return null;
+      }
     }
-    }
-    }
+  }
 
-// solve a slider puzzle (given below)
-public static void main(String[]args){
-    }
+  // solve a slider puzzle (given below)
+  public static void main(String[] args) {
+  }
 
-    }
+}

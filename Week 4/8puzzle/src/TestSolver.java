@@ -101,68 +101,6 @@ public class TestSolver {
 }
 
 
-/*
-
-private Optional<SearchNode> findGoalBoard(){
-
-    this method uses the A* algorithm
-
-    create a SearchNode with the initial board and place it on the minPriorityQueue
-    create a SearchNode with a twin of the initial board and place it in twinMinPriorityQueue
-
-    loop:
-      dequeue the SearchNode with the lowest manhattan priority
-      check if the de-queued SearchNode contains the goal board
-      if true
-        then return the de-queued SearchNode in an Optional
-      else replace it with all neighbors whose boards are not equal to the board of the previousSearchNode
-
-      twin:
-        dequeue the SearchNode with the lowest manhattan priority
-        check if the de-queued SearchNode contains the goal board
-        if true
-          then return Optional.empty()
-        else replace it with all neighbors whose boards are not equal to the board of the previousSearchNode
-}
-
-
-
------------------------------------------------
-Solver
-
-Rep
-  MinPQ minPriorityQueue
-  MinPQ twinMinPriorityQueue
-  Board goalBoard
-
-
-create inner class SearchNode
-
-  SearchNode
-    board
-    Optional<SearchNode> previousSearchNode
-    manhattanPriority
-    numberOfMoves
-
-
-
-create a Solver object with an initial board
-
-
-  initial board
-    numberOfMoves = 0
-    previousBoard = Optional<SearchNode>.empty()
-
-
-
-
-
-
----------------------------------------------------------------------------------------------------------
-
-
-
- */
 
 
 
